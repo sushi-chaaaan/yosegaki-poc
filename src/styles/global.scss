@@ -1,0 +1,112 @@
+@use "./base" as base;
+@use "./config/mixins" as mixin;
+@use "./variables" as var;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  scroll-behavior: smooth;
+
+  @include mixin.reduce-motion {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  display: flex;
+  flex-flow: column nowrap;
+  min-height: 100dvh;
+  font-family:
+    Roboto,
+    "Noto Sans JP",
+    system-ui,
+    -apple-system,
+    blinkmacsystemfont,
+    "Segoe UI",
+    oxygen,
+    ubuntu,
+    cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif;
+
+  @include base.typography;
+  @include base.base-color;
+}
+
+* {
+  letter-spacing: var.$letter-spacing;
+}
+
+*::view-transition-group(*) {
+  animation-duration: 1.5s;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+ul,
+ol {
+  padding-inline-start: 1.25rem;
+  list-style-type: disc;
+
+  > * {
+    margin-block: 0.5rem;
+  }
+}
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+
+  @include mixin.mq("md") {
+    font-size: 2.5rem;
+  }
+}
+
+h2 {
+  font-size: 1.375rem;
+  font-weight: 700;
+
+  @include mixin.mq("md") {
+    font-size: 2rem;
+  }
+}
+
+h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+
+  @include mixin.mq("md") {
+    font-size: 1.625rem;
+  }
+}
+
+h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+
+  @include mixin.mq("md") {
+    font-size: 1.375rem;
+  }
+}
+
+h5 {
+  font-size: 1.15rem;
+  font-weight: 700;
+
+  @include mixin.mq("md") {
+    font-size: 1.25rem;
+  }
+}
+
+h6 {
+  font-size: 1.075rem;
+  font-weight: 700;
+
+  @include mixin.mq("md") {
+    font-size: 1.125rem;
+  }
+}
