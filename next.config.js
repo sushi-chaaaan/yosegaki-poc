@@ -4,6 +4,14 @@ const nextConfig = {
   experimental: {
     typedRoutes: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "pbs.twimg.com",
+      },
+    ],
+  },
 }
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({

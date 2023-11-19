@@ -40,5 +40,10 @@ module.exports = {
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
   },
-  ignorePatterns: [".eslintrc.cjs", "tailwind.config.ts", "next.config.js"],
+  ignorePatterns: [
+    ".eslintrc.cjs",
+    "tailwind.config.ts",
+    "next.config.js",
+    "src/env.mjs",
+  ],
 }
