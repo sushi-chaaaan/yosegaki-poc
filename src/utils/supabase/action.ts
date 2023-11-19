@@ -13,7 +13,7 @@ const signIn = async () => {
   const { data } = await supabase.auth.signInWithOAuth({
     provider: "twitter",
     options: {
-      redirectTo: `${env.NEXT_PUBLIC_VERCEL_URL}/auth/callback`,
+      redirectTo: `${env.VERCEL_URL}/auth/callback`,
       skipBrowserRedirect: true,
     },
   })
