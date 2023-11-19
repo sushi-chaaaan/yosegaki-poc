@@ -4,7 +4,8 @@ import { useId, useRef, useState } from "react"
 import { useFormState } from "react-dom"
 
 import ImagePreview from "@/app/(main)/form/components/imagePreview"
-import { FormState, submitAction } from "@/app/(main)/form/lib/formAction"
+import { submitAction } from "@/app/(main)/form/lib/formAction"
+import type { FormState } from "@/app/(main)/form/types"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -16,7 +17,7 @@ const MessageForm = () => {
       // 最終的にはDBから取得する
       title: "",
       content: "",
-      file: null,
+      file: undefined,
     },
     error: {},
     message: "",
@@ -31,7 +32,17 @@ const MessageForm = () => {
 
   return (
     <div className="flex flex-col flex-nowrap gap-y-8">
-      <form action={dispatch} className="flex flex-col gap-y-4">
+      <form
+        action={(e) => {
+          const entries = e.entries()
+          // log entries
+          for (const entry of entries) {
+            console.log(entry)
+          }
+          dispatch(e)
+        }}
+        className="flex flex-col gap-y-4"
+      >
         {state.message && (
           <p className="text-red-500 dark:text-red-900">{state.message}</p>
         )}
@@ -75,7 +86,6 @@ const MessageForm = () => {
           <Label htmlFor={fileId}>添付ファイル</Label>
           <Input
             accept="image/*"
-            defaultValue={state.value?.file}
             id={fileId}
             name="file"
             onChange={(e) => {

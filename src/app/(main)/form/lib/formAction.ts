@@ -1,14 +1,8 @@
 "use server"
 
-import { FormValue, MessageSchema } from "@/app/(main)/form/message"
+import { mkdir, writeFile } from "fs/promises"
 
-export type FormState = {
-  value: FormValue | undefined
-  error: {
-    [K in keyof FormValue]?: string[]
-  }
-  message?: string
-}
+import { type FormState, MessageSchema } from "@/app/(main)/form/types"
 
 export const submitAction = async (
   state: FormState,
@@ -24,27 +18,37 @@ export const submitAction = async (
     file: rawFile,
   })
 
-  console.log(JSON.stringify(state, null, 2))
-
   if (!validatedMessage.success) {
     return {
       value: {
         title: rawTitle?.toString() ?? "",
         content: rawContent?.toString() ?? "",
-        file: rawFile?.toString(),
+        file: undefined,
       },
       message: "入力内容に誤りがあります。",
       error: validatedMessage.error.flatten().fieldErrors,
     }
   }
 
-  console.log(JSON.stringify(validatedMessage, null, 2))
+  // save Message to DB
+  const { title, content, file } = validatedMessage.data
+
+  // replace with DB
+  await mkdir(`./data/${title}`, { recursive: true })
+  await writeFile(`./data/${title}/title.txt`, title)
+  await writeFile(`./data/${title}/content.txt`, content)
+  if (file instanceof Blob) {
+    await writeFile(
+      `./data/${title}/${file.name}`,
+      Buffer.from(await file.arrayBuffer()),
+    )
+  }
 
   return {
     value: {
       title: validatedMessage.data.title,
       content: validatedMessage.data.content,
-      file: validatedMessage.data.file?.toString(),
+      file: undefined,
     },
     message: "送信しました。",
     error: {},
