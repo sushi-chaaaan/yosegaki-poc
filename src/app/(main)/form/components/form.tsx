@@ -4,7 +4,7 @@ import { useId, useRef, useState } from "react"
 import { useFormState } from "react-dom"
 
 import ImagePreview from "@/app/(main)/form/components/imagePreview"
-import { submitAction } from "@/app/(main)/form/lib/formAction"
+import { deleteAction, submitAction } from "@/app/(main)/form/lib/formAction"
 import type { FormState, Message } from "@/app/(main)/form/types"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -101,6 +101,9 @@ const MessageForm = ({ initialMessage }: FormProps) => {
         </div>
         <Button type="submit">送信</Button>
       </form>
+      <Button onClick={() => deleteAction()} variant="destructive">
+        寄せ書きを削除する
+      </Button>
       <ImagePreview file={image} />
     </div>
   )

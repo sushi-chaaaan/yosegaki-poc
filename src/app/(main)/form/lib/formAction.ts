@@ -1,9 +1,10 @@
 "use server"
 
+import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
 
 import { type FormState, MessageSchema } from "@/app/(main)/form/types"
-import { upSertMessage } from "@/lib/message"
+import { deleteMessage, upSertMessage } from "@/lib/message"
 
 export const submitAction = async (
   state: FormState,
@@ -34,6 +35,8 @@ export const submitAction = async (
   }
   await upSertMessage(cookieStore, validatedMessage.data)
 
+  revalidatePath("/form")
+
   return {
     value: {
       title: validatedMessage.data.title,
@@ -43,4 +46,11 @@ export const submitAction = async (
     message: "送信しました。",
     error: {},
   }
+}
+
+export const deleteAction = async () => {
+  const cookieStore = cookies()
+  await deleteMessage(cookieStore)
+
+  revalidatePath("/form")
 }
