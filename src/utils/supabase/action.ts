@@ -6,14 +6,20 @@ import { redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
 import { getSiteUrl } from "@/utils/supabase/url"
 
-const signIn = async () => {
+const signIn = async (redirectTo?: string) => {
   const cookieStore = cookies()
   const supabase = createClient(cookieStore)
+
+  const authCallbackUrl = new URL(
+    "/auth/callback",
+    getSiteUrl({ addTrailingSlash: false }),
+  )
+  authCallbackUrl.searchParams.append("redirectTo", redirectTo ?? "/")
 
   const { data } = await supabase.auth.signInWithOAuth({
     provider: "twitter",
     options: {
-      redirectTo: `${getSiteUrl({ addTrailingSlash: false })}/auth/callback`,
+      redirectTo: authCallbackUrl.toString(),
       skipBrowserRedirect: true,
     },
   })

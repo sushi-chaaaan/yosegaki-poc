@@ -6,10 +6,13 @@ import { createClient } from "@/utils/supabase/server"
 
 export const getMessage = async (
   cookies: ReadonlyRequestCookies,
-): Promise<Message> => {
+): Promise<Message | undefined> => {
   const supabase = createClient(cookies)
   const userResponse = await supabase.auth.getUser()
-  if (userResponse.error) throw userResponse.error
+  if (userResponse.error) {
+    console.error(userResponse.error)
+    return undefined
+  }
   const uid = userResponse.data.user.id
 
   const { data, error } = await supabase
