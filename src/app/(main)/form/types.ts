@@ -1,16 +1,6 @@
 import { z } from "zod"
 
 export const MessageSchema = z.object({
-  title: z
-    .string({
-      invalid_type_error: "タイトルを入力してください。",
-    })
-    .min(1, {
-      message: "タイトルを入力してください。",
-    })
-    .max(100, {
-      message: "タイトルは100文字以内で入力してください。",
-    }),
   content: z
     .string({
       invalid_type_error: "寄せ書き本文を入力してください。",

@@ -17,16 +17,16 @@ export const getMessage = async (
     .select("*")
     .eq("uid", uid)
     .single()
-  if (data == null) return { title: "", content: "" }
+  if (data == null) return { content: "" }
 
   if (error) throw error
 
   // add file getter
-
-  return {
-    title: data?.title ?? "",
-    content: data?.content ?? "",
+  if (data.file_name) {
+    // get file here
   }
+
+  return { content: data?.content ?? "" }
 }
 
 export const upSertMessage = async (
@@ -42,8 +42,8 @@ export const upSertMessage = async (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data, error } = await supabase.from("message").upsert({
     uid: uid,
-    title: body.title,
     content: body.content,
+    file_name: body.file?.name,
   })
 
   if (!body.file) return

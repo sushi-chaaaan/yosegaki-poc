@@ -18,7 +18,6 @@ type FormProps = {
 }
 
 const MessageForm = ({ initialMessage }: FormProps) => {
-  const titleId = useId()
   const contentId = useId()
   const contentRef = useRef<HTMLTextAreaElement | null>(null)
   const fileId = useId()
@@ -53,20 +52,6 @@ const MessageForm = ({ initialMessage }: FormProps) => {
             {state.message}
           </p>
         )}
-        <div>
-          <Label htmlFor={titleId}>寄せ書きタイトル</Label>
-          <Input
-            defaultValue={state.value?.title}
-            id={titleId}
-            name="title"
-            type="text"
-          />
-          {state.error?.title && (
-            <p className="text-red-500 dark:text-red-900">
-              {state.error.title}
-            </p>
-          )}
-        </div>
         <div>
           <Label htmlFor={contentId}>寄せ書き本文</Label>
           <Textarea

@@ -11,13 +11,10 @@ export const submitAction = async (
   data: FormData,
 ): Promise<FormState> => {
   const cookieStore = cookies()
-
-  const rawTitle = data.get("title")
   const rawContent = data.get("content")
   const rawFile = data.get("file")
 
   const validatedMessage = MessageSchema.safeParse({
-    title: rawTitle,
     content: rawContent,
     file: rawFile,
   })
@@ -25,7 +22,6 @@ export const submitAction = async (
   if (!validatedMessage.success) {
     return {
       value: {
-        title: rawTitle?.toString() ?? "",
         content: rawContent?.toString() ?? "",
         file: undefined,
       },
@@ -39,7 +35,6 @@ export const submitAction = async (
 
   return {
     value: {
-      title: validatedMessage.data.title,
       content: validatedMessage.data.content,
       file: undefined,
     },
