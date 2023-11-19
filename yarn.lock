@@ -1100,37 +1100,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stitches/core@npm:^1.2.8":
-  version: 1.2.8
-  resolution: "@stitches/core@npm:1.2.8"
-  checksum: f2ddf5aba3f3794529ceda10e573d61d649899c1d6e4f72f0fb77915577bb4e5a1ffc6e0cebd2bc19a1e6f93d5e1e91ff0790c7a8dfb452e90b090b1a5f1c531
-  languageName: node
-  linkType: hard
-
-"@supabase/auth-ui-react@npm:^0.4.6":
-  version: 0.4.6
-  resolution: "@supabase/auth-ui-react@npm:0.4.6"
-  dependencies:
-    "@stitches/core": "npm:^1.2.8"
-    "@supabase/auth-ui-shared": "npm:0.1.8"
-    prop-types: "npm:^15.7.2"
-    react: "npm:^18.2.0"
-    react-dom: "npm:^18.2.0"
-  peerDependencies:
-    "@supabase/supabase-js": ^2.21.0
-  checksum: 27ebedb97d29a55bc179ac4baa08e386938a8ef25fed92f1a53b4380c5169c17001c3939c50e7333d0846b18b2538ce2c465a58a769a6a2e0ca73ea687d2407d
-  languageName: node
-  linkType: hard
-
-"@supabase/auth-ui-shared@npm:0.1.8, @supabase/auth-ui-shared@npm:^0.1.8":
-  version: 0.1.8
-  resolution: "@supabase/auth-ui-shared@npm:0.1.8"
-  peerDependencies:
-    "@supabase/supabase-js": ^2.21.0
-  checksum: 5a2b5f5d603827c3f626487fa569ff0c453e398400ff941fa50d66a7a689a1ff54e93ed0483186bc4e982eee25a454b949a97e5eb2a5e8c68b9eee2f9afa307f
-  languageName: node
-  linkType: hard
-
 "@supabase/functions-js@npm:^2.1.5":
   version: 2.1.5
   resolution: "@supabase/functions-js@npm:2.1.5"
@@ -5613,8 +5582,6 @@ __metadata:
     "@radix-ui/react-icons": "npm:^1.3.0"
     "@radix-ui/react-label": "npm:^2.0.2"
     "@radix-ui/react-slot": "npm:^1.0.2"
-    "@supabase/auth-ui-react": "npm:^0.4.6"
-    "@supabase/auth-ui-shared": "npm:^0.1.8"
     "@supabase/ssr": "npm:^0.0.10"
     "@supabase/supabase-js": "npm:^2.38.4"
     "@t3-oss/env-nextjs": "npm:^0.7.1"
@@ -7876,7 +7843,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
