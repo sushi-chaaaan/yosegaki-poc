@@ -19,18 +19,18 @@ export const MessageSchema = z.object({
     .max(2000, {
       message: "本文は2000文字以内で入力してください。",
     }),
-  file: z.custom<File | undefined>(
-    (value) => {
-      if (value === undefined) return true
-      if (value instanceof Blob && value.type.startsWith("image/")) {
-        return true
-      }
-      return false
-    },
-    {
-      message: "ファイルを選択してください。",
-    },
-  ),
+  file: z
+    .custom<FileList>()
+    .optional()
+    .transform((value) => (value ? value[0] : undefined))
+    .refine(
+      (value) =>
+        value === undefined ||
+        (value !== undefined && value.type.startsWith("image/")),
+      {
+        message: "画像ファイルを選択してください。",
+      },
+    ),
 })
 
 export type Message = z.infer<typeof MessageSchema>
