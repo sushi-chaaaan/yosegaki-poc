@@ -107,6 +107,7 @@ const MessageForm = ({ initialMessage }: FormProps) => {
         <Button
           disabled={isLoading}
           onClick={runDeleteAction}
+          type="button"
           variant="destructive"
         >
           {isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
