@@ -29,7 +29,7 @@ export const submitAction = async (
         content: rawContent?.toString() ?? "",
         file: undefined,
       },
-      message: "入力内容に誤りがあります。",
+      message: "",
       error: validatedMessage.error.flatten().fieldErrors,
     }
   }
@@ -51,6 +51,4 @@ export const submitAction = async (
 export const deleteAction = async () => {
   const cookieStore = cookies()
   await deleteMessage(cookieStore)
-
-  revalidatePath("/form")
 }

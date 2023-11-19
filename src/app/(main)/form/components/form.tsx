@@ -1,5 +1,6 @@
 "use client"
 
+import { ReloadIcon } from "@radix-ui/react-icons"
 import { useId, useRef, useState } from "react"
 import { useFormState } from "react-dom"
 
@@ -10,12 +11,18 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { useLocation } from "@/hooks/useLocation"
 
 type FormProps = {
   initialMessage: Message
 }
 
 const MessageForm = ({ initialMessage }: FormProps) => {
+  const titleId = useId()
+  const contentId = useId()
+  const contentRef = useRef<HTMLTextAreaElement | null>(null)
+  const fileId = useId()
+
   const initialState: FormState = {
     value: initialMessage,
     error: {},
@@ -23,27 +30,28 @@ const MessageForm = ({ initialMessage }: FormProps) => {
   }
   const [state, dispatch] = useFormState(submitAction, initialState)
   const [image, setImage] = useState<File | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const location = useLocation()
 
-  const titleId = useId()
-  const contentId = useId()
-  const contentRef = useRef<HTMLTextAreaElement | null>(null)
-  const fileId = useId()
+  const handleDelete = async () => {
+    setIsLoading(true)
+    await deleteAction()
+    setIsLoading(false)
+    location?.reload()
+  }
 
   return (
     <div className="flex flex-col flex-nowrap gap-y-8">
       <form
         action={(e) => {
-          const entries = e.entries()
-          // log entries
-          for (const entry of entries) {
-            console.log(entry)
-          }
           dispatch(e)
         }}
         className="flex flex-col gap-y-4"
       >
         {state.message && (
-          <p className="text-red-500 dark:text-red-900">{state.message}</p>
+          <p className="font-bold text-green-500 dark:text-green-900">
+            {state.message}
+          </p>
         )}
         <div>
           <Label htmlFor={titleId}>寄せ書きタイトル</Label>
@@ -100,10 +108,16 @@ const MessageForm = ({ initialMessage }: FormProps) => {
           )}
         </div>
         <Button type="submit">送信</Button>
+        <Button
+          disabled={isLoading}
+          onClick={handleDelete}
+          variant="destructive"
+        >
+          {isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
+          寄せ書きを削除する
+        </Button>
       </form>
-      <Button onClick={() => deleteAction()} variant="destructive">
-        寄せ書きを削除する
-      </Button>
+
       <ImagePreview file={image} />
     </div>
   )
