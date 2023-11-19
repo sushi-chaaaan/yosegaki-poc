@@ -7,7 +7,7 @@ export default function Home() {
     <MaxWidth type="content">
       <div className=" text-center">
         <h1>棗いつき誕生日記念寄せ書き</h1>
-        <Link href="/form">message form page</Link>
+        <Link href="/join">寄せ書きを送る</Link>
       </div>
     </MaxWidth>
   )
