@@ -4,8 +4,6 @@ import "@/styles/global.scss"
 import type { Metadata } from "next"
 import NextTopLoader from "nextjs-toploader"
 
-import Footer from "@/components/layout/footer"
-import Header from "@/components/layout/header"
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
@@ -22,9 +20,7 @@ export default function RootLayout({
     <html lang="ja">
       <body>
         <NextTopLoader />
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        {children}
         <Toaster />
       </body>
     </html>
