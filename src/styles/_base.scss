@@ -13,11 +13,6 @@
 @mixin base-color {
   color: var.$text-color-light;
   background-color: var.$theme-color-light;
-
-  @include mix.scheme("dark") {
-    color: var.$text-color-dark;
-    background-color: var.$theme-color-dark;
-  }
 }
 
 @mixin base-content-layout {
