@@ -12,6 +12,12 @@ export const env = createEnv({
     TWITTER_CLIENT_SECRET: z.string().min(1),
     SUPABASE_URL: z.string().url().min(1),
     SUPABASE_ANON_KEY: z.string().min(1),
+    NEXT_PUBLIC_VERCEL_URL: z
+      .string()
+      .url()
+      .min(1)
+      .optional()
+      .default("http://localhost:3000"),
   },
   /*
    * Environment variables available on the client (and server).
@@ -21,6 +27,12 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_SUPABASE_URL: z.string().url().min(1),
     NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1),
+    NEXT_PUBLIC_VERCEL_URL: z
+      .string()
+      .url()
+      .min(1)
+      .optional()
+      .default("http://localhost:3000"),
   },
   /*
    * Due to how Next.js bundles environment variables on Edge and Client,
@@ -35,5 +47,6 @@ export const env = createEnv({
     SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    NEXT_PUBLIC_VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_URL,
   },
 })

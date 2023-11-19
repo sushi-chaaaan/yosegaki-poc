@@ -1,20 +1,19 @@
 "use server"
 
-import { cookies, headers } from "next/headers"
+import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
+import { env } from "@/env.mjs"
 import { createClient } from "@/utils/supabase/server"
 
 const signIn = async () => {
   const cookieStore = cookies()
-  const header = headers()
-  const origin = header.get("origin")
   const supabase = createClient(cookieStore)
 
   const { data } = await supabase.auth.signInWithOAuth({
     provider: "twitter",
     options: {
-      redirectTo: `${origin}/auth/callback`,
+      redirectTo: `${env.NEXT_PUBLIC_VERCEL_URL}/auth/callback`,
       skipBrowserRedirect: true,
     },
   })
