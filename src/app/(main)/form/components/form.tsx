@@ -5,20 +5,19 @@ import { useFormState } from "react-dom"
 
 import ImagePreview from "@/app/(main)/form/components/imagePreview"
 import { submitAction } from "@/app/(main)/form/lib/formAction"
-import type { FormState } from "@/app/(main)/form/types"
+import type { FormState, Message } from "@/app/(main)/form/types"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 
-const MessageForm = () => {
+type FormProps = {
+  initialMessage: Message
+}
+
+const MessageForm = ({ initialMessage }: FormProps) => {
   const initialState: FormState = {
-    value: {
-      // 最終的にはDBから取得する
-      title: "",
-      content: "",
-      file: undefined,
-    },
+    value: initialMessage,
     error: {},
     message: "",
   }

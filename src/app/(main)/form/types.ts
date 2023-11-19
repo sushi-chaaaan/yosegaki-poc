@@ -33,12 +33,12 @@ export const MessageSchema = z.object({
   ),
 })
 
-export type FormValue = z.infer<typeof MessageSchema>
+export type Message = z.infer<typeof MessageSchema>
 
 export type FormState = {
-  value: FormValue | undefined
+  value: Message | undefined
   error: {
-    [K in keyof FormValue]?: string[]
+    [K in keyof Message]?: string[]
   }
   message?: string
 }

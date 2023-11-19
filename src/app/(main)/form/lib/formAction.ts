@@ -1,13 +1,16 @@
 "use server"
 
-import { mkdir, writeFile } from "fs/promises"
+import { cookies } from "next/headers"
 
 import { type FormState, MessageSchema } from "@/app/(main)/form/types"
+import { upSertMessage } from "@/lib/message"
 
 export const submitAction = async (
   state: FormState,
   data: FormData,
 ): Promise<FormState> => {
+  const cookieStore = cookies()
+
   const rawTitle = data.get("title")
   const rawContent = data.get("content")
   const rawFile = data.get("file")
@@ -29,20 +32,7 @@ export const submitAction = async (
       error: validatedMessage.error.flatten().fieldErrors,
     }
   }
-
-  // save Message to DB
-  const { title, content, file } = validatedMessage.data
-
-  // replace with DB
-  await mkdir(`./data/${title}`, { recursive: true })
-  await writeFile(`./data/${title}/title.txt`, title)
-  await writeFile(`./data/${title}/content.txt`, content)
-  if (file instanceof Blob) {
-    await writeFile(
-      `./data/${title}/${file.name}`,
-      Buffer.from(await file.arrayBuffer()),
-    )
-  }
+  await upSertMessage(cookieStore, validatedMessage.data)
 
   return {
     value: {

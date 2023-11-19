@@ -44,3 +44,5 @@ next-env.d.ts
 !.yarn/versions
 
 data/*
+
+src/types/supabase.ts
