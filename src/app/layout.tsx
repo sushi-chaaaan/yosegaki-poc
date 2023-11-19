@@ -6,6 +6,7 @@ import NextTopLoader from "nextjs-toploader"
 
 import Footer from "@/components/layout/footer"
 import Header from "@/components/layout/header"
+import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,6 +25,7 @@ export default function RootLayout({
         <Header />
         <main>{children}</main>
         <Footer />
+        <Toaster />
       </body>
     </html>
   )

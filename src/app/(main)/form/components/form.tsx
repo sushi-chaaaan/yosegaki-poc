@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { useToast } from "@/components/ui/use-toast"
 import { useLocation } from "@/hooks/useLocation"
 
 type FormProps = {
@@ -21,6 +22,7 @@ const MessageForm = ({ initialMessage }: FormProps) => {
   const contentId = useId()
   const contentRef = useRef<HTMLTextAreaElement | null>(null)
   const fileId = useId()
+  const { toast } = useToast()
 
   const initialState: FormState = {
     value: initialMessage,
@@ -32,21 +34,28 @@ const MessageForm = ({ initialMessage }: FormProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const location = useLocation()
 
-  const handleDelete = async () => {
+  const runSubmitAction = async (e: FormData) => {
+    setIsLoading(true)
+    dispatch(e)
+    setIsLoading(false)
+  }
+
+  const runDeleteAction = async () => {
     setIsLoading(true)
     await deleteAction()
     setIsLoading(false)
-    location?.reload()
+    toast({
+      description: "寄せ書きを削除しました。",
+      variant: "default",
+    })
+    setTimeout(() => {
+      location?.reload()
+    }, 1000)
   }
 
   return (
     <div className="flex flex-col flex-nowrap gap-y-8">
-      <form
-        action={(e) => {
-          dispatch(e)
-        }}
-        className="flex flex-col gap-y-4"
-      >
+      <form className="flex flex-col gap-y-4">
         {state.message && (
           <p className="font-bold text-green-500 dark:text-green-900">
             {state.message}
@@ -92,10 +101,12 @@ const MessageForm = ({ initialMessage }: FormProps) => {
             <p className="text-red-500 dark:text-red-900">{state.error.file}</p>
           )}
         </div>
-        <Button type="submit">送信</Button>
+        <Button formAction={runSubmitAction} type="submit">
+          送信
+        </Button>
         <Button
           disabled={isLoading}
-          onClick={handleDelete}
+          onClick={runDeleteAction}
           variant="destructive"
         >
           {isLoading && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
