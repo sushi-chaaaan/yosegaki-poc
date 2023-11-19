@@ -3,8 +3,8 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
-import { env } from "@/env.mjs"
 import { createClient } from "@/utils/supabase/server"
+import { NEXT_PUBLIC_VERCEL_URL } from "@/utils/url"
 
 const signIn = async () => {
   const cookieStore = cookies()
@@ -13,7 +13,7 @@ const signIn = async () => {
   const { data } = await supabase.auth.signInWithOAuth({
     provider: "twitter",
     options: {
-      redirectTo: `${env.VERCEL_URL}/auth/callback`,
+      redirectTo: `${NEXT_PUBLIC_VERCEL_URL}/auth/callback`,
       skipBrowserRedirect: true,
     },
   })
