@@ -10,12 +10,14 @@ export const getMessage = async (
   cookies: ReadonlyRequestCookies,
 ): Promise<Message | undefined> => {
   const supabase = createClient(cookies)
-  const userResponse = await supabase.auth.getUser()
-  if (userResponse.error) {
-    console.error(userResponse.error)
+  const { data: sessionData, error: sessionError } =
+    await supabase.auth.getSession()
+
+  if (sessionError || sessionData.session == null) {
+    console.error(sessionError)
     return undefined
   }
-  const uid = userResponse.data.user.id
+  const uid = sessionData.session.user.id
 
   const { data, error } = await supabase
     .from("message")
@@ -70,10 +72,11 @@ export const upSertMessage = async (
   body: z.infer<typeof MessageSchema>,
 ) => {
   const supabase = createClient(cookies)
-  const userResponse = await supabase.auth.getUser()
-  if (userResponse.error) throw userResponse.error
+  const sessionRes = await supabase.auth.getSession()
+  if (sessionRes.error || sessionRes.data.session == null)
+    throw sessionRes.error
 
-  const uid = userResponse.data.user.id
+  const uid = sessionRes.data.session.user.id
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data, error } = await supabase.from("message").upsert({
@@ -95,9 +98,11 @@ export const upSertMessage = async (
 
 export const deleteMessage = async (cookies: ReadonlyRequestCookies) => {
   const supabase = createClient(cookies)
-  const userResponse = await supabase.auth.getUser()
-  if (userResponse.error) throw userResponse.error
-  const uid = userResponse.data.user.id
+  const sessionRes = await supabase.auth.getSession()
+  if (sessionRes.error || sessionRes.data.session == null)
+    throw sessionRes.error
+
+  const uid = sessionRes.data.session.user.id
 
   const { error } = await supabase.from("message").delete().eq("uid", uid)
   if (error) throw error

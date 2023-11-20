@@ -1,19 +1,18 @@
-import { cookies } from "next/headers"
 import Link from "next/link"
 
 import SignInButton from "@/components/supabase/signInButton"
 import { buttonVariants } from "@/components/ui/styles/button"
 import { cn } from "@/lib/utils"
-import { createClient } from "@/supabase/utils/serverClient"
+import { getServerSession } from "@/supabase/lib/session"
 
 export default async function FormButton() {
-  const cookieStore = cookies()
-  const supabase = createClient(cookieStore)
-  const user = await supabase.auth.getUser()
+  const {
+    data: { session },
+  } = await getServerSession()
 
   return (
     <div>
-      {user.data ? (
+      {session ? (
         <Link
           className={cn(buttonVariants({ className: "no-underline" }))}
           href="/form"
