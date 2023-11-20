@@ -1,7 +1,7 @@
-import { getAllMessages } from "@/lib/message"
+import { getAllAcceptedMessages } from "@/lib/message"
 
 export default async function AllMessages() {
-  const messages = await getAllMessages()
+  const messages = await getAllAcceptedMessages()
 
   return (
     <div>

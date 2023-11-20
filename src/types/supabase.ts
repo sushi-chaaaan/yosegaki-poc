@@ -37,16 +37,19 @@ export interface Database {
     Tables: {
       message: {
         Row: {
+          accepted: boolean
           content: string
           file_name: string | null
           uid: string
         }
         Insert: {
+          accepted?: boolean
           content?: string
           file_name?: string | null
           uid?: string
         }
         Update: {
+          accepted?: boolean
           content?: string
           file_name?: string | null
           uid?: string

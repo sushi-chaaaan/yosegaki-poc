@@ -47,6 +47,24 @@ export const getAllMessages = async (): Promise<Message[]> => {
     return validated.success ? [validated.data] : []
   })
 }
+
+export const getAllAcceptedMessages = async (): Promise<Message[]> => {
+  const supabase = createAdminClient()
+  const { data, error } = await supabase
+    .from("message")
+    .select("*")
+    .eq("accepted", true)
+  if (error) throw error
+
+  return await asyncFlatMap(data, async (message) => {
+    const validated = await MessageSchema.safeParseAsync({
+      content: message.content,
+      file: undefined,
+    })
+    return validated.success ? [validated.data] : []
+  })
+}
+
 export const upSertMessage = async (
   cookies: ReadonlyRequestCookies,
   body: z.infer<typeof MessageSchema>,
