@@ -2,9 +2,9 @@ import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension
 import { z } from "zod"
 
 import { type Message, MessageSchema } from "@/app/(main)/form/types"
+import { createClient as createAdminClient } from "@/supabase/utils/adminClient"
+import { createClient } from "@/supabase/utils/serverClient"
 import { asyncFlatMap } from "@/utils/array"
-import { createClient as createAdminClient } from "@/utils/supabase/client/admin"
-import { createClient } from "@/utils/supabase/client/server"
 
 export const getMessage = async (
   cookies: ReadonlyRequestCookies,
