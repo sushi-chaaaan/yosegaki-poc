@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { signOut } from "@/utils/supabase/action"
+import { signOut } from "@/supabase/action"
 
 const SignOutButton = () => {
   return (

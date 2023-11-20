@@ -4,7 +4,7 @@ import Link from "next/link"
 
 import SignInButton from "@/components/supabase/signInButton"
 import SignOutButton from "@/components/supabase/signOutButton"
-import { createClient } from "@/utils/supabase/serverClient"
+import { createClient } from "@/utils/supabase/client/server"
 
 const Header = async () => {
   const cookieStore = cookies()

@@ -3,8 +3,8 @@ import { z } from "zod"
 
 import { type Message, MessageSchema } from "@/app/(main)/form/types"
 import { asyncFlatMap } from "@/utils/array"
-import { createClient as createAdminClient } from "@/utils/supabase/adminClient"
-import { createClient } from "@/utils/supabase/serverClient"
+import { createClient as createAdminClient } from "@/utils/supabase/client/admin"
+import { createClient } from "@/utils/supabase/client/server"
 
 export const getMessage = async (
   cookies: ReadonlyRequestCookies,

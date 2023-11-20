@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { signIn } from "@/utils/supabase/action"
+import { signIn } from "@/supabase/action"
 
 type SignInButtonProps = {
   redirectTo?: string

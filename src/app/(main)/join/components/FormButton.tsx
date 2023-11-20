@@ -4,7 +4,7 @@ import Link from "next/link"
 import SignInButton from "@/components/supabase/signInButton"
 import { buttonVariants } from "@/components/ui/styles/button"
 import { cn } from "@/lib/utils"
-import { createClient } from "@/utils/supabase/serverClient"
+import { createClient } from "@/utils/supabase/client/server"
 
 export default async function FormButton() {
   const cookieStore = cookies()
