@@ -2,7 +2,9 @@ import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension
 import { z } from "zod"
 
 import { type Message, MessageSchema } from "@/app/(main)/form/types"
-import { createClient } from "@/utils/supabase/server"
+import { asyncFlatMap } from "@/utils/array"
+import { createClient as createAdminClient } from "@/utils/supabase/adminClient"
+import { createClient } from "@/utils/supabase/serverClient"
 
 export const getMessage = async (
   cookies: ReadonlyRequestCookies,
@@ -29,9 +31,22 @@ export const getMessage = async (
     // get file here
   }
 
-  return { content: data?.content ?? "" }
+  return { content: data.content }
 }
 
+export const getAllMessages = async (): Promise<Message[]> => {
+  const supabase = createAdminClient()
+  const { data, error } = await supabase.from("message").select("*")
+  if (error) throw error
+
+  return await asyncFlatMap(data, async (message) => {
+    const validated = await MessageSchema.safeParseAsync({
+      content: message.content,
+      file: undefined,
+    })
+    return validated.success ? [validated.data] : []
+  })
+}
 export const upSertMessage = async (
   cookies: ReadonlyRequestCookies,
   body: z.infer<typeof MessageSchema>,
