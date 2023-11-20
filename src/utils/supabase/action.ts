@@ -3,7 +3,7 @@
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
-import { createClient } from "@/utils/supabase/server"
+import { createClient } from "@/utils/supabase/serverClient"
 import { getSiteUrl } from "@/utils/supabase/url"
 
 const signIn = async (redirectTo?: string) => {

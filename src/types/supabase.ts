@@ -37,18 +37,36 @@ export interface Database {
     Tables: {
       message: {
         Row: {
-          content: string | null
+          content: string
           file_name: string | null
           uid: string
         }
         Insert: {
-          content?: string | null
+          content?: string
           file_name?: string | null
           uid?: string
         }
         Update: {
-          content?: string | null
+          content?: string
           file_name?: string | null
+          uid?: string
+        }
+        Relationships: []
+      }
+      user: {
+        Row: {
+          avatar_url: string
+          name: string
+          uid: string
+        }
+        Insert: {
+          avatar_url?: string
+          name?: string
+          uid?: string
+        }
+        Update: {
+          avatar_url?: string
+          name?: string
           uid?: string
         }
         Relationships: []
