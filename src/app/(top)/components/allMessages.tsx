@@ -1,7 +1,18 @@
+import { unstable_cache } from "next/cache"
+
+import { ACCEPTED_MESSAGES_CACHE_TAG } from "@/cache"
 import { getAllAcceptedMessages } from "@/lib/message"
 
 export default async function AllMessages() {
-  const messages = await getAllAcceptedMessages()
+  const getCachedAcceptedMessages = unstable_cache(
+    async () => await getAllAcceptedMessages(),
+    undefined,
+    {
+      tags: [ACCEPTED_MESSAGES_CACHE_TAG],
+      revalidate: false,
+    },
+  )
+  const messages = await getCachedAcceptedMessages()
 
   return (
     <div>

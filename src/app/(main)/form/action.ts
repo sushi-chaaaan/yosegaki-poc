@@ -1,9 +1,10 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
+import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 
 import { type FormState, MessageSchema } from "@/app/(main)/form/types"
+import { ACCEPTED_MESSAGES_CACHE_TAG } from "@/cache"
 import { deleteMessage, upSertMessage } from "@/lib/message"
 
 export const submitAction = async (
@@ -30,8 +31,7 @@ export const submitAction = async (
     }
   }
   await upSertMessage(cookieStore, validatedMessage.data)
-
-  revalidatePath("/form")
+  revalidateTag(ACCEPTED_MESSAGES_CACHE_TAG)
 
   return {
     value: {
@@ -46,4 +46,5 @@ export const submitAction = async (
 export const deleteAction = async () => {
   const cookieStore = cookies()
   await deleteMessage(cookieStore)
+  revalidateTag(ACCEPTED_MESSAGES_CACHE_TAG)
 }
