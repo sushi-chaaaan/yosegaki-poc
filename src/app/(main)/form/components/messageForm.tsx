@@ -5,6 +5,7 @@ import { useId, useRef, useState } from "react"
 import { useFormState } from "react-dom"
 
 import { deleteAction, submitAction } from "@/app/(main)/form/action"
+import SubmitButton from "@/app/(main)/form/components/submitButton"
 import type { FormState } from "@/app/(main)/form/types"
 import MessageCard from "@/components/messageCard"
 import { Button } from "@/components/ui/button"
@@ -41,9 +42,8 @@ const MessageForm = ({ initialMessage }: FormProps) => {
   const location = useLocation()
 
   const runSubmitAction = async (e: FormData) => {
-    setIsLoading(true)
+    // upload image here
     dispatch(e)
-    setIsLoading(false)
   }
 
   const runDeleteAction = async () => {
@@ -61,7 +61,7 @@ const MessageForm = ({ initialMessage }: FormProps) => {
 
   return (
     <div className="flex flex-col flex-nowrap gap-y-8">
-      <form className="flex flex-col gap-y-4">
+      <form action={runSubmitAction} className="flex flex-col gap-y-4">
         {state.message && (
           <p className="font-bold text-green-500 dark:text-green-900">
             {state.message}
@@ -107,9 +107,7 @@ const MessageForm = ({ initialMessage }: FormProps) => {
             <p className="text-red-500 dark:text-red-900">{state.error.file}</p>
           )}
         </div>
-        <Button formAction={runSubmitAction} type="submit">
-          送信
-        </Button>
+        <SubmitButton>投稿</SubmitButton>
         <Button
           disabled={isLoading}
           onClick={runDeleteAction}
