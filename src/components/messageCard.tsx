@@ -28,7 +28,8 @@ const MessageCard = ({ user, content, file }: Props) => {
           <Image
             alt={file.name}
             fill
-            sizes="(max-width: 768px) 50vw, 33vw"
+            quality={100}
+            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             src={file.url}
           />
         )}
