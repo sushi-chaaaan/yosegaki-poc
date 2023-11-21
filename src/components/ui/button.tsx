@@ -6,7 +6,6 @@ import {
   type ButtonVariantProps,
   buttonVariants,
 } from "@/components/ui/styles/button"
-import { cn } from "@/lib/utils"
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -19,7 +18,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button"
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={buttonVariants({ variant, size, className })}
         ref={ref}
         {...props}
       />
