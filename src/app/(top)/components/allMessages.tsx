@@ -15,12 +15,15 @@ export default async function AllMessages() {
   const messages = await getCachedAcceptedMessages()
 
   return (
-    <div>
+    <>
       {messages.map((message, i) => (
-        <div key={i}>
+        <div
+          className="rounded-lg border border-yellow-400 bg-yellow-200"
+          key={i}
+        >
           <p>{message.content}</p>
         </div>
       ))}
-    </div>
+    </>
   )
 }

@@ -1,12 +1,25 @@
 import { Slot } from "@radix-ui/react-slot"
-import { clsx } from "clsx"
+import { tv, VariantProps } from "tailwind-variants"
 
 import type { PropsWithAsChild } from "@/types/asChild"
 
-type MaxWidthProps = {
-  children: React.ReactNode
-  type: "content" | "full"
-}
+const MaxWidthVariants = tv({
+  variants: {
+    type: {
+      content: "max-w-[960px]",
+      full: "max-w-full",
+    },
+    center: {
+      true: "mx-auto",
+    },
+  },
+  defaultVariants: {
+    type: "content",
+    center: true,
+  },
+})
+
+type MaxWidthProps = VariantProps<typeof MaxWidthVariants>
 
 type Props = PropsWithAsChild<MaxWidthProps, "div">
 
@@ -20,16 +33,21 @@ type Props = PropsWithAsChild<MaxWidthProps, "div">
  * @export
  * @param {Props}
  */
-export default function MaxWidth({ children, asChild, type }: Props) {
+export default function MaxWidth({
+  children,
+  asChild,
+  type,
+  center,
+  className,
+  ...props
+}: Props) {
   asChild ??= false
   const Component = asChild ? Slot : "div"
 
   return (
     <Component
-      className={clsx({
-        "max-w-[960px] mx-auto": type === "content",
-        "max-w-full": type === "full",
-      })}
+      className={MaxWidthVariants({ type, center, className })}
+      {...props}
     >
       {children}
     </Component>
