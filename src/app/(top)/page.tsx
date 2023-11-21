@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-// import AllMessages from "@/app/(top)/components/allMessages"
+import AllMessages from "@/app/(top)/components/allMessages"
 import MaxWidth from "@/components/layout/maxWidth"
 
 export default function Home() {
@@ -12,19 +12,19 @@ export default function Home() {
           <Link href="/join">寄せ書きを送る</Link>
         </div>
       </MaxWidth>
-      {/* <MaxWidth
+      <MaxWidth
         asChild
         center
         className="flex flex-col flex-nowrap"
         type="full"
       >
-        <div className="prose text-center">
-          <h2>寄せ書き一覧</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 ">
-            <AllMessages />
-          </div>
+        <div className="prose">
+          <h2 className="text-center">寄せ書き一覧</h2>
+          <AllMessages />
         </div>
-      </MaxWidth> */}
+      </MaxWidth>
     </div>
   )
 }
+
+export const revalidate = 3600

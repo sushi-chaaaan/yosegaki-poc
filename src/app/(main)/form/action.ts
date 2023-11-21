@@ -3,9 +3,10 @@
 import { revalidateTag } from "next/cache"
 import { cookies } from "next/headers"
 
-import { type FormState, MessageSchema } from "@/app/(main)/form/types"
+import type { FormState } from "@/app/(main)/form/types"
 import { ACCEPTED_MESSAGES_CACHE_TAG } from "@/cache"
-import { deleteMessage, upSertMessage } from "@/lib/message"
+import { MessageSchema } from "@/messages/types"
+import { deleteMessage, upSertMessage } from "@/supabase/lib/message"
 
 export const submitAction = async (
   state: FormState,
@@ -46,5 +47,4 @@ export const submitAction = async (
 export const deleteAction = async () => {
   const cookieStore = cookies()
   await deleteMessage(cookieStore)
-  revalidateTag(ACCEPTED_MESSAGES_CACHE_TAG)
 }

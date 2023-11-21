@@ -5,17 +5,18 @@ import { useId, useRef, useState } from "react"
 import { useFormState } from "react-dom"
 
 import { deleteAction, submitAction } from "@/app/(main)/form/action"
-import ImagePreview from "@/app/(main)/form/components/imagePreview"
-import type { FormState, Message } from "@/app/(main)/form/types"
+import type { FormState } from "@/app/(main)/form/types"
+import MessageCard from "@/components/messageCard"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import { useLocation } from "@/hooks/useLocation"
+import type { DownloadedMessage } from "@/messages/types"
 
 type FormProps = {
-  initialMessage: Message
+  initialMessage: DownloadedMessage
 }
 
 const MessageForm = ({ initialMessage }: FormProps) => {
@@ -25,12 +26,17 @@ const MessageForm = ({ initialMessage }: FormProps) => {
   const { toast } = useToast()
 
   const initialState: FormState = {
-    value: initialMessage,
+    value: {
+      content: initialMessage.content,
+      file: undefined,
+    },
     error: {},
     message: "",
   }
   const [state, dispatch] = useFormState(submitAction, initialState)
-  const [image, setImage] = useState<File | null>(null)
+  const [image, setImage] = useState<string | undefined>(
+    initialMessage.file?.url,
+  )
   const [isLoading, setIsLoading] = useState(false)
   const location = useLocation()
 
@@ -92,7 +98,7 @@ const MessageForm = ({ initialMessage }: FormProps) => {
             onChange={(e) => {
               const file = e.target.files?.[0]
               if (file) {
-                setImage(file)
+                setImage(URL.createObjectURL(file))
               }
             }}
             type="file"
@@ -115,7 +121,11 @@ const MessageForm = ({ initialMessage }: FormProps) => {
         </Button>
       </form>
 
-      <ImagePreview file={image} />
+      <MessageCard
+        content={state.value?.content ?? ""}
+        file={image ? { name: "preview", url: image } : undefined}
+        user={initialMessage.user}
+      />
     </div>
   )
 }

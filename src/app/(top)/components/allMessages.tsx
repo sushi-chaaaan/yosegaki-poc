@@ -1,29 +1,25 @@
 import { unstable_cache } from "next/cache"
 
 import { ACCEPTED_MESSAGES_CACHE_TAG } from "@/cache"
-import { getAllAcceptedMessages } from "@/lib/message"
+import Message from "@/components/messageCard"
+import { getAllAcceptedMessages } from "@/supabase/lib/message"
 
 export default async function AllMessages() {
   const getCachedAcceptedMessages = unstable_cache(
     async () => await getAllAcceptedMessages(),
-    undefined,
+    ["all-accepted-messages-display-to-top-page"],
     {
       tags: [ACCEPTED_MESSAGES_CACHE_TAG],
-      revalidate: false,
+      revalidate: 3600,
     },
   )
   const messages = await getCachedAcceptedMessages()
 
   return (
-    <>
-      {messages.map((message, i) => (
-        <div
-          className="rounded-lg border border-yellow-400 bg-yellow-200"
-          key={i}
-        >
-          <p>{message.content}</p>
-        </div>
+    <div className="grid grid-cols-2 md:grid-cols-3 ">
+      {messages.map((message) => (
+        <Message key={message.user.id} {...message} />
       ))}
-    </>
+    </div>
   )
 }
