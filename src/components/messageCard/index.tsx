@@ -1,6 +1,9 @@
 import Image from "next/image"
 
+import styles from "@/components/messageCard/message-card.module.scss"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { notoSansJP } from "@/lib/font"
+import { cn } from "@/lib/utils"
 import { FileWithUrl, User } from "@/messages/types"
 
 type Props = {
@@ -12,7 +15,7 @@ type Props = {
 const MessageCard = ({ user, content, file }: Props) => {
   return (
     <div
-      className="not-prose flex flex-col flex-nowrap gap-y-8 rounded-lg border border-yellow-400 bg-yellow-200 p-4"
+      className={cn("not-prose", styles.root, notoSansJP.className)}
       key={user.id}
     >
       <div className="flex flex-row flex-nowrap items-center gap-x-4">
@@ -23,10 +26,11 @@ const MessageCard = ({ user, content, file }: Props) => {
         <span className="text-xl font-bold">{user.name}</span>
       </div>
       <p>{content}</p>
-      <div className="relative aspect-video w-full overflow-hidden rounded">
+      <div className="relative aspect-golden w-full overflow-hidden">
         {file && (
           <Image
             alt={file.name}
+            className="object-contain"
             fill
             quality={100}
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"

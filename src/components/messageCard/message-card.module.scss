@@ -1,0 +1,11 @@
+.root {
+  display: flex;
+  flex-flow: column nowrap;
+  row-gap: 2rem;
+  padding: 1rem;
+  background-color: rgb(235 187 64);
+  border: 2px dashed;
+  border-color: rgb(185 112 21);
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0 1rem rgb(235 187 64);
+}

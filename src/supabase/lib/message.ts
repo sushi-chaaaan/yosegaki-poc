@@ -30,7 +30,7 @@ export const getMessage = async (
       user: {
         avatar_url: session.user.user_metadata.avatar_url,
         id: session.user.id,
-        name: session.user.user_metadata.user_name,
+        name: session.user.user_metadata.name,
       },
     }
 
@@ -54,7 +54,7 @@ export const getMessage = async (
     user: {
       id: session.user.id,
       avatar_url: session.user.user_metadata.avatar_url,
-      name: session.user.user_metadata.user_name,
+      name: session.user.user_metadata.name,
     },
     file: userFile,
   }

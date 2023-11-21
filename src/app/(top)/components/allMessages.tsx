@@ -16,7 +16,7 @@ export default async function AllMessages() {
   const messages = await getCachedAcceptedMessages()
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid grid-cols-1 p-4 md:grid-cols-2 xl:grid-cols-3">
       {messages.map((message) => (
         <Message key={message.user.id} {...message} />
       ))}

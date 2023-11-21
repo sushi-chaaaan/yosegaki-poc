@@ -19,6 +19,25 @@ export default {
       },
     },
     extend: {
+      aspectRatio: {
+        golden: "1.618",
+        "golden-inverse": "0.618",
+      },
+      colors: {
+        anzac: {
+          "50": "#fcf8ea",
+          "100": "#f9efc8",
+          "200": "#f4dc94",
+          "300": "#ebbb40",
+          "400": "#e6a929",
+          "500": "#d7921b",
+          "600": "#b97015",
+          "700": "#945014",
+          "800": "#7b4018",
+          "900": "#69351a",
+          "950": "#3d1b0b",
+        },
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
