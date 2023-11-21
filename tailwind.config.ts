@@ -36,5 +36,5 @@ export default {
     },
   },
   plugins: [tailwindAnimate, tailwindTypoGraphy, daisyui],
-  daisyui: { logs: false } satisfies DaisyConfig,
+  daisyui: { logs: false, themes: ["light"] } satisfies DaisyConfig,
 } satisfies Config
