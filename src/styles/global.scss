@@ -18,8 +18,8 @@ body {
   flex-flow: column nowrap;
   min-height: 100dvh;
   font-family:
-    Roboto,
-    "Noto Sans JP",
+    var(--font-roboto),
+    var(--font-noto-sans-jp),
     system-ui,
     -apple-system,
     blinkmacsystemfont,

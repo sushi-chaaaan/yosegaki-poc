@@ -5,6 +5,7 @@ import type { Metadata, Viewport } from "next"
 
 import ProgressBar from "@/components/layout/progress"
 import { Toaster } from "@/components/ui/toaster"
+import { fontVariables } from "@/lib/font"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,7 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body>
+      <body className={fontVariables}>
         <ProgressBar />
         {children}
         <Toaster />
