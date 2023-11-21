@@ -124,6 +124,7 @@ const MessageForm = ({ initialMessage }: FormProps) => {
       <MessageCard
         content={state.value?.content ?? ""}
         file={image ? { name: "preview", url: image } : undefined}
+        priorityLoading
         user={initialMessage.user}
       />
     </div>

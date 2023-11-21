@@ -10,9 +10,10 @@ type Props = {
   user: User
   content: string
   file?: FileWithUrl
+  priorityLoading?: boolean
 }
 
-const MessageCard = ({ user, content, file }: Props) => {
+const MessageCard = ({ user, content, file, priorityLoading }: Props) => {
   return (
     <div
       className={cn("not-prose", styles.root, notoSansJP.className)}
@@ -32,6 +33,7 @@ const MessageCard = ({ user, content, file }: Props) => {
             alt={file.name}
             className="object-contain"
             fill
+            priority={priorityLoading}
             quality={100}
             sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
             src={file.url}
