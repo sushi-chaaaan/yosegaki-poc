@@ -2,8 +2,8 @@ import "@unocss/reset/tailwind.css"
 import "@/styles/global.scss"
 
 import type { Metadata, Viewport } from "next"
-import NextTopLoader from "nextjs-toploader"
 
+import ProgressBar from "@/components/layout/progress"
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body>
-        <NextTopLoader />
+        <ProgressBar />
         {children}
         <Toaster />
       </body>
