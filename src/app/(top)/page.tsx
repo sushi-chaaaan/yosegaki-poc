@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-import AllMessages from "@/app/(top)/components/allMessages"
+// import AllMessages from "@/app/(top)/components/allMessages"
 import MaxWidth from "@/components/layout/maxWidth"
 
 export default function Home() {
@@ -20,7 +20,8 @@ export default function Home() {
       >
         <div className="prose">
           <h2 className="text-center">寄せ書き一覧</h2>
-          <AllMessages />
+          {/* <AllMessages /> */}
+          <div>Coming Soon</div>
         </div>
       </MaxWidth>
     </div>
