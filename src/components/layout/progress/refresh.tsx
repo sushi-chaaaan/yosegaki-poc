@@ -9,7 +9,6 @@ export default function RefreshProgress() {
   const pathName = usePathname()
 
   useEffect(() => {
-    console.log("pathName", pathName)
     NProgress.done()
   }, [pathName, router])
 
