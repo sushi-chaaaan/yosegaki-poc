@@ -13,6 +13,7 @@ export const env = createEnv({
     SUPABASE_URL: z.string().url().min(1),
     SUPABASE_ANON_KEY: z.string().min(1),
     SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
+    SUPABASE_CONNECTION_STRING: z.string().min(1),
   },
   /*
    * Environment variables available on the client (and server).
@@ -37,5 +38,6 @@ export const env = createEnv({
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    SUPABASE_CONNECTION_STRING: process.env.SUPABASE_CONNECTION_STRING,
   },
 })
