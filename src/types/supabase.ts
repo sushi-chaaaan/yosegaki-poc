@@ -40,29 +40,50 @@ export interface Database {
           accepted: boolean
           content: string
           file_name: string | null
-          uid: string
+          id: string
         }
         Insert: {
           accepted?: boolean
           content?: string
           file_name?: string | null
-          uid: string
+          id: string
         }
         Update: {
           accepted?: boolean
           content?: string
           file_name?: string | null
-          uid?: string
+          id?: string
         }
         Relationships: [
           {
             foreignKeyName: "message_uid_fkey"
-            columns: ["uid"]
+            columns: ["id"]
             isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
         ]
+      }
+      user: {
+        Row: {
+          avatar_url: string | null
+          display_name: string
+          id: string
+          name: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          display_name?: string
+          id: string
+          name?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          display_name?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
       }
     }
     Views: {
