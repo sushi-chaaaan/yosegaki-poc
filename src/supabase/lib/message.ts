@@ -17,12 +17,12 @@ export const getMessage = async (
   session: Session,
 ): Promise<DownloadedMessage | undefined> => {
   const supabase = createClient(cookies)
-  const uid = session.user.id
+  const id = session.user.id
 
   const { data: message, error } = await supabase
     .from("message")
     .select("*")
-    .eq("uid", uid)
+    .eq("id", id)
     .single()
   if (error != null)
     return {
@@ -81,7 +81,7 @@ export const getAllAcceptedMessages = async (): Promise<
   const messageWithUserMap = await asyncFlatMap(
     allAcceptedMessages,
     async (message) => {
-      const user = users.find((user) => user.id === message.uid)
+      const user = users.find((user) => user.id === message.id)
       if (!user) return []
 
       let userFile: FileWithUrl | undefined
@@ -125,18 +125,18 @@ export const upSertMessage = async (
   if (sessionRes.error || sessionRes.data.session == null)
     throw sessionRes.error
 
-  const uid = sessionRes.data.session.user.id
+  const id = sessionRes.data.session.user.id
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data, error } = await supabase.from("message").upsert({
-    uid: uid,
+    id: id,
     content: body.content,
     file_name: body.file?.name,
   })
 
   if (!body.file) return
 
-  const filePath = `${uid}/${body.file.name}`
+  const filePath = `${id}/${body.file.name}`
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data: fileData, error: fileError } = await supabase.storage
     .from("images")
@@ -151,9 +151,9 @@ export const deleteMessage = async (cookies: ReadonlyRequestCookies) => {
   if (sessionRes.error || sessionRes.data.session == null)
     throw sessionRes.error
 
-  const uid = sessionRes.data.session.user.id
+  const id = sessionRes.data.session.user.id
 
-  const { error } = await supabase.from("message").delete().eq("uid", uid)
+  const { error } = await supabase.from("message").delete().eq("id", id)
   if (error) throw error
 
   // delete file
