@@ -4,7 +4,7 @@ import postgres from "postgres"
 import { env } from "@/env.mjs"
 import * as schema from "@/supabase/schema"
 
-const connectionString = env.SUPABASE_URL
+const connectionString = env.SUPABASE_CONNECTION_STRING
 
 const client = postgres(connectionString)
 
