@@ -23,7 +23,7 @@ const MessageCard = ({ user, content, file, priorityLoading }: Props) => {
           </Avatar>
           <span className="text-xl font-bold">{user.name}</span>
         </div>
-        <p>{content}</p>
+        <p className="whitespace-pre-wrap">{content}</p>
         <div className="relative aspect-golden w-full overflow-hidden">
           {file && (
             <Image
