@@ -9,6 +9,7 @@ module.exports = {
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
     "plugin:tailwindcss/recommended",
+    "plugin:drizzle/recommended",
     "plugin:jsx-a11y/recommended",
     "prettier",
   ],
