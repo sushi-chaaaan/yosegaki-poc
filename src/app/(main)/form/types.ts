@@ -1,9 +1,9 @@
-import { Message } from "@/messages/types"
+import { YosegakiInputType } from "@/messages/types/yosegaki"
 
 export type FormState = {
-  value: Message | undefined
+  value: YosegakiInputType | undefined
   error: {
-    [K in keyof Message]?: string[]
+    [K in keyof YosegakiInputType]?: string[]
   }
   message?: {
     type: "success" | "error"

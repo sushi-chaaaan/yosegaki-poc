@@ -4,40 +4,35 @@ import { revalidateTag } from "next/cache"
 
 import type { FormState } from "@/app/(main)/form/types"
 import { ACCEPTED_MESSAGES_CACHE_TAG } from "@/cache"
-import { MessageImageSchema } from "@/messages/types"
-import { deleteMessage, upsertMessage } from "@/supabase/lib/db/message"
+import { deleteMessage } from "@/messages/lib/message"
+import { upsertYosegaki } from "@/messages/lib/yosegaki"
+import {
+  YosegakiInputSchema,
+  YosegakiInsertSchema,
+} from "@/messages/types/yosegaki"
 import { getServerSession } from "@/supabase/lib/session"
-import { messageInsertSchema } from "@/supabase/schema/message"
 
 export const submitAction = async (
   state: FormState,
   data: FormData,
 ): Promise<FormState> => {
   const rawContent = data.get("content")
-  const rawFile = data.get("file")
+  const rawImage = data.get("image")
 
-  const InputSchema = messageInsertSchema
-    .pick({
-      content: true,
-    })
-    .extend({
-      file: MessageImageSchema,
-    })
-
-  const inputValResult = InputSchema.safeParse({
+  const inputValResult = YosegakiInputSchema.safeParse({
     content: rawContent,
-    file: rawFile,
+    image: rawImage,
   })
 
   if (!inputValResult.success) {
     return {
       value: {
         content: rawContent?.toString() ?? "",
-        file: undefined,
+        image: undefined,
       },
       message: {
         type: "error",
-        content: "エラーが発生しました。",
+        content: "入力内容にエラーがあります。",
       },
       error: inputValResult.error.flatten().fieldErrors,
     }
@@ -49,11 +44,11 @@ export const submitAction = async (
     return {
       value: {
         content: inputValResult.data.content,
-        file: undefined,
+        image: undefined,
       },
       message: {
         type: "error",
-        content: "エラーが発生しました。",
+        content: "セッションエラーが発生しました。",
       },
       error: {
         content: [sessionError?.message ?? "エラーが発生しました。"],
@@ -61,34 +56,38 @@ export const submitAction = async (
     }
   }
 
-  const insertMessageValResult = messageInsertSchema.safeParse({
-    id: sessionData.session.user.id,
-    content: inputValResult.data.content,
-    file_name: inputValResult.data.file?.name ?? "",
-    accepted: false,
+  const insertYosegakiValResult = YosegakiInsertSchema.safeParse({
+    message: {
+      id: sessionData.session.user.id,
+      content: inputValResult.data.content,
+      file_name: inputValResult.data.image?.name ?? "",
+      accepted: false,
+    },
+    image: inputValResult.data.image,
+    user: sessionData.session.user,
   })
 
-  if (!insertMessageValResult.success) {
+  if (!insertYosegakiValResult.success) {
+    console.error(insertYosegakiValResult.error)
     return {
       value: {
         content: inputValResult.data.content,
-        file: undefined,
+        image: undefined,
       },
       message: {
         type: "error",
-        content: "エラーが発生しました。",
+        content: "データエラーが発生しました。",
       },
-      error: insertMessageValResult.error.flatten().fieldErrors,
+      error: insertYosegakiValResult.error.flatten().fieldErrors,
     }
   }
-
-  await upsertMessage(insertMessageValResult.data)
+  await upsertYosegaki(insertYosegakiValResult.data)
   revalidateTag(ACCEPTED_MESSAGES_CACHE_TAG)
 
   return {
     value: {
-      content: insertMessageValResult.data.content,
-      file: undefined,
+      content: insertYosegakiValResult.data.message.content,
+      image: undefined,
     },
     message: {
       type: "success",

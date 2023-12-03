@@ -23,13 +23,18 @@ const getImage = async (
   const supabase = createClient(cookies())
   const filePath = getFilePath(id, fileName)
 
-  const { data: signedUrlData } = await supabase.storage
+  const { data, error } = await supabase.storage
     .from(IMAGE_BUCKET)
     .createSignedUrl(filePath, 4000)
 
+  if (error) {
+    console.log(error)
+    return undefined
+  }
+
   const result = ImageOutputSchema.safeParse({
     name: fileName,
-    url: signedUrlData?.signedUrl,
+    url: data?.signedUrl,
   })
 
   if (!result.success) {

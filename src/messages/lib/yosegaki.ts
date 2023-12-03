@@ -20,9 +20,9 @@ const getYosegaki = async (
     try {
       const res = await db
         .select()
-        .from(message)
-        .where(eq(message.id, id))
-        .innerJoin(user, eq(message.id, user.id))
+        .from(user)
+        .where(eq(user.id, id))
+        .leftJoin(message, eq(user.id, message.id))
       return getFirstIndex(res)
     } catch (error) {
       console.log(error)
@@ -30,11 +30,19 @@ const getYosegaki = async (
     }
   })
 
-  if (result == undefined) {
+  // invalid user id
+  if (result == undefined || result.user == undefined) {
     return undefined
   }
 
-  if (result.message.file_name == null) {
+  // no message yet
+  if (result.message == undefined) {
+    return {
+      user: result.user,
+    }
+  }
+
+  if (result.message.file_name == null || result.message.file_name == "") {
     const val = YosegakiSelectSchema.safeParse({
       ...result,
       image: undefined,

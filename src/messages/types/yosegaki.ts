@@ -14,13 +14,23 @@ const YosegakiInsertSchema = z.object({}).extend({
 type YosegakiInsertType = z.infer<typeof YosegakiInsertSchema>
 
 const YosegakiSelectSchema = z.object({}).extend({
-  message: messageSelectSchema,
+  message: messageSelectSchema.optional(),
   user: userSelectSchema,
   image: ImageOutputSchema,
 })
 type YosegakiSelectType = z.infer<typeof YosegakiSelectSchema>
 
+const YosegakiInputSchema = z
+  .object({})
+  .merge(messageInsertSchema.pick({ content: true }))
+  .extend({
+    image: ImageInputSchema,
+  })
+type YosegakiInputType = z.infer<typeof YosegakiInputSchema>
+
 export {
+  YosegakiInputSchema,
+  type YosegakiInputType,
   YosegakiInsertSchema,
   type YosegakiInsertType,
   YosegakiSelectSchema,

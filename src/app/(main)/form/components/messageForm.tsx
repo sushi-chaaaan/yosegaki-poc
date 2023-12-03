@@ -15,13 +15,15 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import { useLocation } from "@/hooks/useLocation"
-import { type DownloadedMessage, fileIsImage } from "@/messages/types"
+import { ImageOutputType } from "@/messages/types/image"
+import { YosegakiSelectType } from "@/messages/types/yosegaki"
+import { fileIsImage } from "@/utils/file"
 
 type FormProps = {
-  initialMessage: DownloadedMessage
+  initialYosegaki: YosegakiSelectType
 }
 
-const MessageForm = ({ initialMessage }: FormProps) => {
+const MessageForm = ({ initialYosegaki }: FormProps) => {
   const contentId = useId()
   const contentRef = useRef<HTMLTextAreaElement | null>(null)
 
@@ -45,19 +47,15 @@ const MessageForm = ({ initialMessage }: FormProps) => {
 
   const initialState: FormState = {
     value: {
-      content: initialMessage.content,
-      file: undefined,
+      content: initialYosegaki.message?.content ?? "",
+      image: undefined,
     },
     error: {},
-    message: {
-      type: "success",
-      content: "",
-    },
   }
 
   const [state, dispatch] = useFormState(submitAction, initialState)
-  const [imageUrl, setImageUrl] = useState<string | undefined>(
-    initialMessage.file?.url,
+  const [image, setImage] = useState<ImageOutputType | undefined>(
+    initialYosegaki.image,
   )
   const [isLoading, setIsLoading] = useState(false)
   const location = useLocation()
@@ -113,16 +111,19 @@ const MessageForm = ({ initialMessage }: FormProps) => {
           <Input
             accept="image/*"
             id={fileId}
-            name="file"
+            name="image"
             onChange={(e) => {
               const file = e.target.files?.[0]
               if (file && fileIsImage(file)) {
-                setImageUrl(URL.createObjectURL(file))
+                setImage({
+                  name: file.name,
+                  url: URL.createObjectURL(file),
+                })
               }
             }}
             type="file"
           />
-          <p className="text-red-500 dark:text-red-900">{state.error.file}</p>
+          <p className="text-red-500 dark:text-red-900">{state.error.image}</p>
         </div>
         <SubmitButton>投稿</SubmitButton>
         <Button
@@ -137,10 +138,12 @@ const MessageForm = ({ initialMessage }: FormProps) => {
       </form>
 
       <MessageCard
-        content={state.value?.content ?? ""}
-        file={imageUrl ? { name: "preview", url: imageUrl } : undefined}
         priorityLoading
-        user={initialMessage.user}
+        yosegaki={{
+          message: initialYosegaki.message,
+          user: initialYosegaki.user,
+          image: image,
+        }}
       />
     </div>
   )
