@@ -24,7 +24,6 @@ const ImageOutputSchema = z
     name: z.string(),
     url: z.string().url(),
   })
-  .optional()
 
 type ImageOutputType = z.infer<typeof ImageOutputSchema>
 

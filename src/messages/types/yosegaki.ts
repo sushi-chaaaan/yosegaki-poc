@@ -16,7 +16,7 @@ type YosegakiInsertType = z.infer<typeof YosegakiInsertSchema>
 const YosegakiSelectSchema = z.object({}).extend({
   message: messageSelectSchema.optional(),
   user: userSelectSchema,
-  image: ImageOutputSchema,
+  image: ImageOutputSchema.optional(),
 })
 type YosegakiSelectType = z.infer<typeof YosegakiSelectSchema>
 
