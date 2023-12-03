@@ -6837,6 +6837,7 @@ __metadata:
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     react-hook-form: "npm:^7.48.2"
+    react-loading-skeleton: "npm:^3.3.1"
     sass: "npm:^1.69.5"
     server-only: "npm:^0.0.1"
     sharp: "npm:^0.33.0"
@@ -9245,6 +9246,15 @@ __metadata:
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: 33977da7a5f1a287936a0c85639fec6ca74f4f15ef1e59a6bc20338fc73dc69555381e211f7a3529b8150a1f71e4225525b41b60b52965bda53ce7d47377ada1
+  languageName: node
+  linkType: hard
+
+"react-loading-skeleton@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "react-loading-skeleton@npm:3.3.1"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 46ae989a74c59dd3f9ecfd480883f1b7a7b083e1329b618c948b889c218192db26148dfc0632e7b55fe0f8b22ddaf97001b539a5210f37045c3fc5b0adf68edc
   languageName: node
   linkType: hard
 
