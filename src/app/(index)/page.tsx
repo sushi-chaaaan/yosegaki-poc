@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-// import AllMessages from "@/app/(top)/components/allMessages"
+// import AllMessages from "@/app/(index)/components/allMessages"
 import MaxWidth from "@/components/layout/maxWidth"
 
 export default function Home() {
