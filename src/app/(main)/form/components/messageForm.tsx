@@ -84,7 +84,7 @@ const MessageForm = ({ initialYosegaki }: FormProps) => {
       <form action={runSubmitAction} className="flex flex-col gap-y-4">
         <p
           className={clsx({
-            "font-bold": true,
+            "font-bold min-h-[1rem]": true,
             "text-green-500 dark:text-green-900":
               state.message?.type === "success",
             "text-red-500 dark:text-red-900": state.message?.type === "error",
@@ -93,7 +93,7 @@ const MessageForm = ({ initialYosegaki }: FormProps) => {
           {state.message?.content}
         </p>
         <div>
-          <Label htmlFor={contentId}>寄せ書き本文</Label>
+          <Label htmlFor={contentId}>寄せ書き本文(必須, 最大2000文字)</Label>
           <Textarea
             className="resize-none"
             defaultValue={state.value?.content}
@@ -103,12 +103,12 @@ const MessageForm = ({ initialYosegaki }: FormProps) => {
             placeholder="寄せ書き本文"
             ref={contentRef}
           />
-          <p className="text-red-500 dark:text-red-900">
+          <p className="min-h-[1rem] text-red-500 dark:text-red-900">
             {state.error.content}
           </p>
         </div>
         <div>
-          <Label htmlFor={fileId}>添付ファイル</Label>
+          <Label htmlFor={fileId}>添付ファイル(画像のみ)</Label>
           <Input
             accept="image/*"
             id={fileId}
@@ -124,7 +124,9 @@ const MessageForm = ({ initialYosegaki }: FormProps) => {
             }}
             type="file"
           />
-          <p className="text-red-500 dark:text-red-900">{state.error.image}</p>
+          <p className="min-h-[1rem] text-red-500 dark:text-red-900">
+            {state.error.image}
+          </p>
         </div>
         <SubmitButton>投稿</SubmitButton>
         <Button
