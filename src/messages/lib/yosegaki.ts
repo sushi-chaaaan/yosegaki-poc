@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm"
 
-import { getImage, upsertImage } from "@/messages/lib/image"
+import { getImage, getImages, upsertImage } from "@/messages/lib/image"
 import { upsertMessage } from "@/messages/lib/message"
 import {
   YosegakiInsertSchema,
@@ -54,7 +54,10 @@ const getYosegaki = async (
     return val.data
   }
 
-  const image = await getImage(id, result.message.file_name)
+  const image = await getImage({
+    id: result.message.id,
+    fileName: result.message.file_name,
+  })
 
   const val = YosegakiSelectSchema.safeParse({
     ...result,
@@ -65,6 +68,70 @@ const getYosegaki = async (
     return undefined
   }
   return val.data
+}
+
+type YosegakiWithImage = {
+  message: {
+    id: string
+    content: string
+    file_name: string
+    accepted: boolean
+  }
+  user: {
+    id: string
+    name: string
+    display_name: string
+    avatar_url: string | null
+  }
+}
+
+const getAllValidYosegaki = async (): Promise<YosegakiSelectType[]> => {
+  const result = await declareLet(async () => {
+    try {
+      // TODO: add accepted condition
+      const res = await db
+        .select()
+        .from(message)
+        .innerJoin(user, eq(message.id, user.id))
+      return res
+    } catch (error) {
+      console.log(error)
+      return undefined
+    }
+  })
+
+  if (result == undefined) {
+    return []
+  }
+
+  const messageImageInfos = result
+    .filter(
+      (res): res is YosegakiWithImage =>
+        res.message.file_name != null && res.message.file_name != "",
+    )
+    .map(({ message }) => ({
+      id: message.id,
+      fileName: message.file_name,
+    }))
+
+  const images =
+    messageImageInfos.length > 0
+      ? await getImages(messageImageInfos)
+      : undefined
+
+  const yosegaki = result.map((res) => {
+    const image = images?.find((image) => image.id == res.message.id)
+    const val = YosegakiSelectSchema.safeParse({
+      ...res,
+      image: image ? image.image : undefined,
+    })
+    if (!val.success) {
+      console.log(val.error)
+      return undefined
+    }
+    return val.data
+  })
+  return yosegaki.filter((y): y is YosegakiSelectType => y != undefined)
 }
 
 const upsertYosegaki = async (yosegaki: YosegakiInsertType) => {
@@ -81,4 +148,4 @@ const upsertYosegaki = async (yosegaki: YosegakiInsertType) => {
   }
 }
 
-export { getYosegaki, upsertYosegaki }
+export { getAllValidYosegaki, getYosegaki, upsertYosegaki }
