@@ -6,6 +6,7 @@ import { useEffect, useId, useRef, useState } from "react"
 import { useFormState } from "react-dom"
 
 import { formAction } from "@/app/(main)/form/action"
+import FieldError from "@/app/(main)/form/components/fieldError"
 import SubmitButton from "@/app/(main)/form/components/submitButton"
 import type { FormState } from "@/app/(main)/form/types"
 import MessageCard from "@/components/messageCard"
@@ -14,6 +15,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
+import { cn } from "@/lib/utils"
 import { ImageOutputType } from "@/messages/types/image"
 import { YosegakiSelectType } from "@/messages/types/yosegaki"
 import { fileIsImage } from "@/utils/file"
@@ -108,12 +110,15 @@ const MessageForm = ({ initialYosegaki }: FormProps) => {
   return (
     <div className="flex flex-col flex-nowrap gap-y-8">
       <form className="flex flex-col gap-y-4" ref={formRef}>
-        <div>
+        <div className="flex flex-col flex-nowrap gap-y-2">
           <Label htmlFor={contentId}>
             寄せ書き本文(必須, 現在 {textLength} / 2000 文字)
           </Label>
           <Textarea
-            className="resize-none"
+            className={cn({
+              "resize-none": true,
+              "border-red-500 dark:border-red-900": state.error.content,
+            })}
             defaultValue={state.value?.content}
             id={contentId}
             name="content"
@@ -121,38 +126,28 @@ const MessageForm = ({ initialYosegaki }: FormProps) => {
             placeholder="寄せ書き本文"
             ref={contentRef}
           />
-          <p
-            aria-hidden={
-              state.error.content == undefined ||
-              state.error.content.length === 0
-            }
-            className="min-h-[1.8rem] text-red-500 dark:text-red-900"
-          >
-            {state.error.content}
-          </p>
+          <FieldError error={state.error.content} />
         </div>
-        <div>
-          <Label htmlFor={imageId}>添付ファイル(画像のみ)</Label>
+        <div className="flex flex-col flex-nowrap gap-y-2">
+          <Label htmlFor={imageId}>添付ファイル(任意, 画像のみ)</Label>
           <Input
             accept="image/*"
+            aria-invalid={state.error.image != null}
+            className={cn({
+              "border-red-500 dark:border-red-900": state.error.image,
+            })}
             id={imageId}
             name="image"
             onChange={handleImageChange}
             type="file"
           />
-          <p
-            aria-hidden={
-              state.error.image == undefined || state.error.image.length === 0
-            }
-            className="min-h-[1.8rem] text-red-500 dark:text-red-900"
-          >
-            {state.error.image}
-          </p>
+          <FieldError error={state.error.image} />
         </div>
         <p
           aria-hidden={state.message == null}
+          aria-live="polite"
           className={clsx({
-            "font-bold min-h-[1.8rem]": true,
+            "min-h-[1.75rem]  text-lg": true,
             "text-green-500 dark:text-green-900":
               state.message?.type === "success",
             "text-red-500 dark:text-red-900": state.message?.type === "error",
