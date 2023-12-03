@@ -127,7 +127,7 @@ const MessageForm = ({ initialYosegaki }: FormProps) => {
         </div>
         <SubmitButton>投稿</SubmitButton>
         <Button
-          disabled={isLoading}
+          disabled={initialYosegaki.message == null || isLoading}
           onClick={runDeleteAction}
           type="button"
           variant="destructive"
