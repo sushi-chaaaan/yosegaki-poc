@@ -46,6 +46,7 @@ const MessageForm = ({ initialYosegaki }: FormProps) => {
   const { toast } = useToast()
 
   const initialState: FormState = {
+    initialValue: initialYosegaki,
     value: {
       content: initialYosegaki.message?.content ?? "",
       image: undefined,

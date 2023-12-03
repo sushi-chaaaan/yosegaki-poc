@@ -11,6 +11,7 @@ import {
   YosegakiInsertSchema,
 } from "@/messages/types/yosegaki"
 import { getServerSession } from "@/supabase/lib/session"
+import { declareLet } from "@/utils/declareLet"
 
 export const submitAction = async (
   state: FormState,
@@ -26,6 +27,7 @@ export const submitAction = async (
 
   if (!inputValResult.success) {
     return {
+      initialValue: state.initialValue,
       value: {
         content: rawContent?.toString() ?? "",
         image: undefined,
@@ -42,6 +44,7 @@ export const submitAction = async (
 
   if (sessionError || sessionData.session === null) {
     return {
+      initialValue: state.initialValue,
       value: {
         content: inputValResult.data.content,
         image: undefined,
@@ -56,11 +59,19 @@ export const submitAction = async (
     }
   }
 
+  // keep the original file name if the user does not change the image
+  const fileName = declareLet(() => {
+    if (inputValResult.data.image == null) {
+      return state.initialValue.image?.name
+    }
+    return inputValResult.data.image.name
+  })
+
   const insertYosegakiValResult = YosegakiInsertSchema.safeParse({
     message: {
       id: sessionData.session.user.id,
       content: inputValResult.data.content,
-      file_name: inputValResult.data.image?.name ?? "",
+      file_name: fileName,
       accepted: false,
     },
     image: inputValResult.data.image,
@@ -70,6 +81,7 @@ export const submitAction = async (
   if (!insertYosegakiValResult.success) {
     console.error(insertYosegakiValResult.error)
     return {
+      initialValue: state.initialValue,
       value: {
         content: inputValResult.data.content,
         image: undefined,
@@ -85,6 +97,7 @@ export const submitAction = async (
   revalidateTag(ACCEPTED_MESSAGES_CACHE_TAG)
 
   return {
+    initialValue: state.initialValue,
     value: {
       content: insertYosegakiValResult.data.message.content,
       image: undefined,
