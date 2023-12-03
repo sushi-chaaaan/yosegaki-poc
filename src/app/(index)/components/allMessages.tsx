@@ -5,7 +5,7 @@ import { ACCEPTED_MESSAGES_CACHE_TAG } from "@/cache"
 import { getAllValidYosegaki } from "@/messages/lib/yosegaki"
 import { chunkArrayWithIndexMod } from "@/utils/array"
 
-const MAX_GRID_COLUMNS = 3
+const MAX_GRID_COLUMNS = 2
 
 export default async function AllMessages() {
   const getCachedAcceptedMessages = unstable_cache(
@@ -23,7 +23,7 @@ export default async function AllMessages() {
 
   return (
     // NOTICE: grid cols must be lte MAX_GRID_COLUMNS
-    <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2">
       {chunkArrayWithIndexMod(messages, MAX_GRID_COLUMNS).map(
         (messageChunk, i) => (
           <MessageColumn

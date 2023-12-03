@@ -16,9 +16,9 @@ export default function Home() {
         asChild
         center
         className="flex flex-col flex-nowrap"
-        type="full"
+        type="content"
       >
-        <div className="prose">
+        <div>
           <h2 className="text-center">寄せ書き一覧</h2>
           {/* <AllMessages /> */}
           <div>Coming Soon</div>

@@ -7,7 +7,7 @@ type Props = {
 
 const MessageColumn = ({ yosegakiArray }: Props) => {
   return (
-    <div className="flex flex-col flex-nowrap">
+    <div className="flex flex-col flex-nowrap gap-4">
       {yosegakiArray.map((yosegaki) => (
         <MessageCard key={yosegaki.user.id} yosegaki={yosegaki} />
       ))}
