@@ -1,6 +1,6 @@
-import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
+import Skeleton from "react-loading-skeleton"
 
-import { Avatar } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import type { YosegakiSelectType } from "@/messages/types/yosegaki"
 
 type Props = {
@@ -9,15 +9,17 @@ type Props = {
 
 const UserInfo = ({ user }: Props) => {
   return (
-    <div className="flex flex-row flex-nowrap items-center gap-x-4">
+    <div className="flex flex-row flex-nowrap items-center gap-x-2">
       <Avatar className="items-center justify-center">
         <AvatarImage
           alt={`avatar of ${user.display_name}`}
           src={user.avatar_url ?? undefined}
         />
-        <AvatarFallback>{user.display_name}</AvatarFallback>
+        <AvatarFallback>
+          <Skeleton circle height={40} width={40} />
+        </AvatarFallback>
       </Avatar>
-      <span className="text-xl font-bold">{user.display_name}</span>
+      <span className="text-lg">{user.display_name}</span>
     </div>
   )
 }
