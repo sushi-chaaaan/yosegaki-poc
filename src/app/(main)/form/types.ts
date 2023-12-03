@@ -5,5 +5,8 @@ export type FormState = {
   error: {
     [K in keyof Message]?: string[]
   }
-  message?: string
+  message?: {
+    type: "success" | "error"
+    content: string
+  }
 }

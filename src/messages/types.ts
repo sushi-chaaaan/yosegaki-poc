@@ -11,15 +11,43 @@ export const MessageBaseSchema = z.object({
     }),
 })
 
+const fileIsEmpty = (file: File) => {
+  return (
+    file != null && file.size === 0 && file.type === "application/octet-stream"
+  )
+}
+
+export const fileIsImage = (file: File) => {
+  return file != null && file.type.startsWith("image/")
+}
+
+export const MessageImageSchema = z
+  .custom<File | undefined>()
+  .optional()
+  .refine(
+    (value) => value == null || fileIsEmpty(value) || fileIsImage(value),
+    {
+      message: "画像ファイルを選択してください。",
+    },
+  )
+  .transform((value) => {
+    if (value == null || fileIsEmpty(value)) return undefined
+    return value
+  })
+
 export const MessageSchema = MessageBaseSchema.extend({
   file: z
     .custom<File>()
     .optional()
     // fix image validation
     .refine(
-      (value) =>
-        value === undefined ||
-        (value !== undefined && value.type.startsWith("image/")),
+      (value) => {
+        console.log(value)
+        return (
+          value === undefined ||
+          (value !== undefined && value.type.startsWith("image/"))
+        )
+      },
       {
         message: "画像ファイルを選択してください。",
       },

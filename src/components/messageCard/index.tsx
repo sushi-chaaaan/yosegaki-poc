@@ -24,8 +24,8 @@ const MessageCard = ({ user, content, file, priorityLoading }: Props) => {
           <span className="text-xl font-bold">{user.name}</span>
         </div>
         <p className="whitespace-pre-wrap">{content}</p>
-        <div className="relative aspect-golden w-full overflow-hidden">
-          {file && (
+        {file && (
+          <div className="relative aspect-golden w-full overflow-hidden">
             <Image
               alt={file.name}
               className="object-contain"
@@ -35,8 +35,8 @@ const MessageCard = ({ user, content, file, priorityLoading }: Props) => {
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
               src={file.url}
             />
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -26,7 +26,7 @@ export const getMessage = async (
     .single()
   if (error != null)
     return {
-      content: "エラーが発生しました。",
+      content: "",
       user: {
         avatar_url: session.user.user_metadata.avatar_url,
         id: session.user.id,

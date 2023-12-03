@@ -1,50 +1,111 @@
 "use server"
 
 import { revalidateTag } from "next/cache"
-import { cookies } from "next/headers"
 
 import type { FormState } from "@/app/(main)/form/types"
 import { ACCEPTED_MESSAGES_CACHE_TAG } from "@/cache"
-import { MessageSchema } from "@/messages/types"
-import { deleteMessage, upSertMessage } from "@/supabase/lib/message"
+import { MessageImageSchema } from "@/messages/types"
+import { deleteMessage, upsertMessage } from "@/supabase/lib/db/message"
+import { getServerSession } from "@/supabase/lib/session"
+import { messageInsertSchema } from "@/supabase/schema/message"
 
 export const submitAction = async (
   state: FormState,
   data: FormData,
 ): Promise<FormState> => {
-  const cookieStore = cookies()
   const rawContent = data.get("content")
   const rawFile = data.get("file")
 
-  const validatedMessage = MessageSchema.safeParse({
+  const InputSchema = messageInsertSchema
+    .pick({
+      content: true,
+    })
+    .extend({
+      file: MessageImageSchema,
+    })
+
+  const inputValResult = InputSchema.safeParse({
     content: rawContent,
     file: rawFile,
   })
 
-  if (!validatedMessage.success) {
+  if (!inputValResult.success) {
     return {
       value: {
         content: rawContent?.toString() ?? "",
         file: undefined,
       },
-      message: "",
-      error: validatedMessage.error.flatten().fieldErrors,
+      message: {
+        type: "error",
+        content: "エラーが発生しました。",
+      },
+      error: inputValResult.error.flatten().fieldErrors,
     }
   }
-  await upSertMessage(cookieStore, validatedMessage.data)
+
+  const { data: sessionData, error: sessionError } = await getServerSession()
+
+  if (sessionError || sessionData.session === null) {
+    return {
+      value: {
+        content: inputValResult.data.content,
+        file: undefined,
+      },
+      message: {
+        type: "error",
+        content: "エラーが発生しました。",
+      },
+      error: {
+        content: [sessionError?.message ?? "エラーが発生しました。"],
+      },
+    }
+  }
+
+  const insertMessageValResult = messageInsertSchema.safeParse({
+    id: sessionData.session.user.id,
+    content: inputValResult.data.content,
+    file_name: inputValResult.data.file?.name ?? "",
+    accepted: false,
+  })
+
+  if (!insertMessageValResult.success) {
+    return {
+      value: {
+        content: inputValResult.data.content,
+        file: undefined,
+      },
+      message: {
+        type: "error",
+        content: "エラーが発生しました。",
+      },
+      error: insertMessageValResult.error.flatten().fieldErrors,
+    }
+  }
+
+  await upsertMessage(insertMessageValResult.data)
   revalidateTag(ACCEPTED_MESSAGES_CACHE_TAG)
 
   return {
     value: {
-      content: validatedMessage.data.content,
+      content: insertMessageValResult.data.content,
       file: undefined,
     },
-    message: "送信しました。",
+    message: {
+      type: "success",
+      content:
+        "寄せ書きを送信しました。一覧への反映には時間がかかる場合があります。",
+    },
     error: {},
   }
 }
 
 export const deleteAction = async () => {
-  const cookieStore = cookies()
-  await deleteMessage(cookieStore)
+  const { data, error } = await getServerSession()
+
+  if (error || data.session === null) {
+    console.log(error ?? "session is null")
+    return
+  }
+
+  await deleteMessage(data.session.user.id)
 }

@@ -1,7 +1,8 @@
 "use client"
 
 import { ReloadIcon } from "@radix-ui/react-icons"
-import { useId, useRef, useState } from "react"
+import clsx from "clsx"
+import { useEffect, useId, useRef, useState } from "react"
 import { useFormState } from "react-dom"
 
 import { deleteAction, submitAction } from "@/app/(main)/form/action"
@@ -14,7 +15,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import { useLocation } from "@/hooks/useLocation"
-import type { DownloadedMessage } from "@/messages/types"
+import { type DownloadedMessage, fileIsImage } from "@/messages/types"
 
 type FormProps = {
   initialMessage: DownloadedMessage
@@ -23,6 +24,22 @@ type FormProps = {
 const MessageForm = ({ initialMessage }: FormProps) => {
   const contentId = useId()
   const contentRef = useRef<HTMLTextAreaElement | null>(null)
+
+  const adjustTextareaHeight = () => {
+    const ref = contentRef.current
+    if (!ref) return
+    const scrollHeight = ref.scrollHeight
+    ref.style.setProperty("height", `${scrollHeight}px`)
+  }
+
+  useEffect(() => {
+    const ref = contentRef.current
+    adjustTextareaHeight()
+    return () => {
+      ref?.style.removeProperty("height")
+    }
+  }, [])
+
   const fileId = useId()
   const { toast } = useToast()
 
@@ -32,10 +49,14 @@ const MessageForm = ({ initialMessage }: FormProps) => {
       file: undefined,
     },
     error: {},
-    message: "",
+    message: {
+      type: "success",
+      content: "",
+    },
   }
+
   const [state, dispatch] = useFormState(submitAction, initialState)
-  const [image, setImage] = useState<string | undefined>(
+  const [imageUrl, setImageUrl] = useState<string | undefined>(
     initialMessage.file?.url,
   )
   const [isLoading, setIsLoading] = useState(false)
@@ -62,11 +83,16 @@ const MessageForm = ({ initialMessage }: FormProps) => {
   return (
     <div className="flex flex-col flex-nowrap gap-y-8">
       <form action={runSubmitAction} className="flex flex-col gap-y-4">
-        {state.message && (
-          <p className="font-bold text-green-500 dark:text-green-900">
-            {state.message}
-          </p>
-        )}
+        <p
+          className={clsx({
+            "font-bold": true,
+            "text-green-500 dark:text-green-900":
+              state.message?.type === "success",
+            "text-red-500 dark:text-red-900": state.message?.type === "error",
+          })}
+        >
+          {state.message?.content}
+        </p>
         <div>
           <Label htmlFor={contentId}>寄せ書き本文</Label>
           <Textarea
@@ -74,20 +100,13 @@ const MessageForm = ({ initialMessage }: FormProps) => {
             defaultValue={state.value?.content}
             id={contentId}
             name="content"
-            onChange={(e) => {
-              const scrollHeight = e.target.scrollHeight
-              contentRef.current?.style.setProperty(
-                "height",
-                `${scrollHeight}px`,
-              )
-            }}
+            onChange={adjustTextareaHeight}
+            placeholder="寄せ書き本文"
             ref={contentRef}
           />
-          {state.error?.content && (
-            <p className="text-red-500 dark:text-red-900">
-              {state.error.content}
-            </p>
-          )}
+          <p className="text-red-500 dark:text-red-900">
+            {state.error.content}
+          </p>
         </div>
         <div>
           <Label htmlFor={fileId}>添付ファイル</Label>
@@ -97,15 +116,13 @@ const MessageForm = ({ initialMessage }: FormProps) => {
             name="file"
             onChange={(e) => {
               const file = e.target.files?.[0]
-              if (file) {
-                setImage(URL.createObjectURL(file))
+              if (file && fileIsImage(file)) {
+                setImageUrl(URL.createObjectURL(file))
               }
             }}
             type="file"
           />
-          {state.error?.file && (
-            <p className="text-red-500 dark:text-red-900">{state.error.file}</p>
-          )}
+          <p className="text-red-500 dark:text-red-900">{state.error.file}</p>
         </div>
         <SubmitButton>投稿</SubmitButton>
         <Button
@@ -121,7 +138,7 @@ const MessageForm = ({ initialMessage }: FormProps) => {
 
       <MessageCard
         content={state.value?.content ?? ""}
-        file={image ? { name: "preview", url: image } : undefined}
+        file={imageUrl ? { name: "preview", url: imageUrl } : undefined}
         priorityLoading
         user={initialMessage.user}
       />
