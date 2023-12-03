@@ -6,7 +6,7 @@ import type { PropsWithAsChild } from "@/types/asChild"
 const MaxWidthVariants = tv({
   variants: {
     type: {
-      content: "max-w-[960px]",
+      content: "max-w-[840px]",
       full: "max-w-full",
     },
     center: {
