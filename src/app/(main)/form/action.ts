@@ -138,4 +138,5 @@ export const deleteAction = async () => {
 
   await deleteMessage(data.session.user.id)
   revalidatePath("/form")
+  revalidateTag(ACCEPTED_MESSAGES_CACHE_TAG)
 }
