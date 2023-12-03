@@ -15,12 +15,16 @@ const MessageCard = ({
   priorityLoading,
 }: Props) => {
   return (
-    <div className={styles.wrapper}>
+    <div
+      className={cn({
+        [styles.wrapper]: true,
+      })}
+    >
       <div className={cn("not-prose", styles.container)} key={user.id}>
         <UserInfo user={user} />
         <p className="whitespace-pre-wrap">{message?.content}</p>
         {image && (
-          <div className="relative aspect-golden w-full overflow-hidden">
+          <div className="relative aspect-golden w-full self-center overflow-hidden">
             <Image
               alt={image.name}
               className="object-contain"
