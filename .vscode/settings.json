@@ -61,5 +61,5 @@
   "files.associations": {
     "**/.github/**/action.{yml,yaml}": "github-actions-workflow"
   },
-  "cSpell.words": ["supabase"]
+  "cSpell.words": ["supabase", "Yosegaki"]
 }
