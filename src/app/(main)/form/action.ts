@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidateTag } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 
 import type { FormState } from "@/app/(main)/form/types"
 import { ACCEPTED_MESSAGES_CACHE_TAG } from "@/cache"
@@ -13,12 +13,29 @@ import {
 import { getServerSession } from "@/supabase/lib/session"
 import { declareLet } from "@/utils/declareLet"
 
-export const submitAction = async (
+export const formAction = async (
   state: FormState,
   data: FormData,
 ): Promise<FormState> => {
   const rawContent = data.get("content")
   const rawImage = data.get("image")
+
+  if (data.get("mode") === "delete") {
+    await deleteAction()
+
+    return {
+      initialValue: state.initialValue,
+      value: {
+        content: "",
+        image: undefined,
+      },
+      message: {
+        type: "success",
+        content: "寄せ書きを削除しました。",
+      },
+      error: {},
+    }
+  }
 
   const inputValResult = YosegakiInputSchema.safeParse({
     content: rawContent,
@@ -53,9 +70,7 @@ export const submitAction = async (
         type: "error",
         content: "セッションエラーが発生しました。",
       },
-      error: {
-        content: [sessionError?.message ?? "エラーが発生しました。"],
-      },
+      error: {},
     }
   }
 
@@ -94,6 +109,8 @@ export const submitAction = async (
     }
   }
   await upsertYosegaki(insertYosegakiValResult.data)
+
+  revalidatePath("/form")
   revalidateTag(ACCEPTED_MESSAGES_CACHE_TAG)
 
   return {
@@ -120,4 +137,5 @@ export const deleteAction = async () => {
   }
 
   await deleteMessage(data.session.user.id)
+  revalidatePath("/form")
 }
