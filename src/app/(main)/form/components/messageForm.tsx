@@ -1,16 +1,15 @@
 "use client"
 
-import { ReloadIcon } from "@radix-ui/react-icons"
 import clsx from "clsx"
 import { useEffect, useId, useRef, useState } from "react"
 import { useFormState } from "react-dom"
 
 import { formAction } from "@/app/(main)/form/action"
+import DeleteButton from "@/app/(main)/form/components/deleteButton"
 import FieldError from "@/app/(main)/form/components/fieldError"
 import SubmitButton from "@/app/(main)/form/components/submitButton"
 import type { FormState } from "@/app/(main)/form/types"
 import MessageCard from "@/components/messageCard"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -73,10 +72,8 @@ const MessageForm = ({ initialYosegaki }: FormProps) => {
   }
 
   const [state, dispatch] = useFormState(formAction, initialState)
-  const [isDeleting, setIsDeleting] = useState(false)
   const handleSubmitAction = async (e: FormData) => {
     // upload image here
-    setIsDeleting(false)
     dispatch(e)
   }
 
@@ -93,10 +90,8 @@ const MessageForm = ({ initialYosegaki }: FormProps) => {
   const formRef = useRef<HTMLFormElement | null>(null)
   const { toast } = useToast()
   const handleDeleteAction = async (e: FormData) => {
-    setIsDeleting(true)
     e.set("mode", "delete")
     dispatch(e)
-    setIsDeleting(false)
     resetForm()
     const { dismiss } = toast({
       description: "寄せ書きを削除しました。",
@@ -156,15 +151,12 @@ const MessageForm = ({ initialYosegaki }: FormProps) => {
           {state.message?.content}
         </p>
         <SubmitButton formAction={handleSubmitAction}>投稿</SubmitButton>
-        <Button
-          disabled={initialYosegaki.message == null || isDeleting}
+        <DeleteButton
+          disabled={initialYosegaki.message == null}
           formAction={handleDeleteAction}
-          type="submit"
-          variant="destructive"
         >
-          {isDeleting && <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />}
           寄せ書きを削除する
-        </Button>
+        </DeleteButton>
       </form>
 
       <MessageCard
