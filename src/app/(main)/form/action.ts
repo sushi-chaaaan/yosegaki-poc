@@ -110,7 +110,7 @@ export const formAction = async (
   }
   await upsertYosegaki(insertYosegakiValResult.data)
 
-  revalidatePath("/form")
+  revalidatePath("/(main)/form")
   revalidateTag(ACCEPTED_MESSAGES_CACHE_TAG)
 
   return {
@@ -137,6 +137,6 @@ export const deleteAction = async () => {
   }
 
   await deleteMessage(data.session.user.id)
-  revalidatePath("/form")
+  revalidatePath("/(main)/form")
   revalidateTag(ACCEPTED_MESSAGES_CACHE_TAG)
 }
