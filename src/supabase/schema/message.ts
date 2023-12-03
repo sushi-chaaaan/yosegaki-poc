@@ -1,5 +1,5 @@
 import { boolean, pgTable, text, uuid } from "drizzle-orm/pg-core"
-import { createInsertSchema } from "drizzle-zod"
+import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 import { z } from "zod"
 
 export const message = pgTable("message", {
@@ -18,5 +18,7 @@ export const messageInsertSchema = createInsertSchema(message, {
     .min(1, { message: "本文を入力してください。" })
     .max(2000, { message: "本文は2000文字以内で入力してください。" }),
 })
-
 export type messageInsertType = z.infer<typeof messageInsertSchema>
+
+export const messageSelectSchema = createSelectSchema(message)
+export type messageSelectType = z.infer<typeof messageSelectSchema>
