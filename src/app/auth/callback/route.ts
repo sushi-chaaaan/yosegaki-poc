@@ -1,6 +1,8 @@
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 
+import { upsertUser } from "@/messages/lib/user"
+import { SessionNotFoundError } from "@/supabase/error"
 import { createClient } from "@/supabase/utils/serverClient"
 
 export async function GET(request: Request) {
@@ -14,7 +16,23 @@ export async function GET(request: Request) {
   if (code) {
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
-    await supabase.auth.exchangeCodeForSession(code)
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.exchangeCodeForSession(code)
+
+    if (error || !session) {
+      const err = error ?? new SessionNotFoundError()
+      console.error(err)
+      return
+    }
+
+    await upsertUser({
+      id: session.user.id,
+      name: session.user.user_metadata.user_name,
+      display_name: session.user.user_metadata.name,
+      avatar_url: session.user.user_metadata.avatar_url,
+    })
   }
 
   // URL to redirect to after sign in process completes
