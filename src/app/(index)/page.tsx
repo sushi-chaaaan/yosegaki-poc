@@ -8,7 +8,7 @@ export default function Home() {
     <div className="px-2">
       <MaxWidth asChild type="content">
         <div className="prose text-center">
-          <h1>棗いつき誕生日記念寄せ書き</h1>
+          <h1>....誕生日記念寄せ書き</h1>
           <Link href="/join">寄せ書きを送る</Link>
         </div>
       </MaxWidth>
